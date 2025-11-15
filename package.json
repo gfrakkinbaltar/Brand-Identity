@@ -1,0 +1,11 @@
+{
+  "name": "brand-identity",
+  "version": "1.0.0",
+  "description": "Brand Identity - Professional web application",
+  "author": "Gaius",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gaius/brand-identity"
+  }
+}
