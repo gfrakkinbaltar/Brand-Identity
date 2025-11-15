@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Systems - Brand Identity Showcase</title>
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Color System */
+            --color-primary: #1a1a1a;
+            --color-secondary: #ffffff;
+            --color-accent: #d4af37;
+            --color-accent-copper: #b87333;
+            --color-gray-light: #f8f9fa;
+            --color-gray-medium: #bdc3c7;
+            --color-navy: #2c3e50;
+            --color-beige: #f5f5dc;
+            
+            /* Typography */
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 32px;
+            --space-xl: 64px;
+            --space-xxl: 128px;
+            
+            /* Shadows */
+            --shadow-sm: 0px 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0px 8px 16px rgba(0,0,0,0.1);
+            --shadow-lg: 0px 16px 32px rgba(0,0,0,0.15);
+            
+            /* Transitions */
+            --transition-fast: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-medium: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--color-primary);
+            background: var(--color-secondary);
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: var(--space-md) 0;
+            border-bottom: 1px solid var(--color-gray-light);
+            opacity: 0;
+            transform: translateY(-100%);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: var(--space-lg);
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-primary);
+            font-weight: 500;
+            transition: var(--transition-fast);
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            transition: var(--transition-fast);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            overflow: hidden;
+        }
+        
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            max-width: 800px;
+            padding: 0 var(--space-lg);
+        }
+        
+        .hero-logo {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto var(--space-xl);
+            opacity: 0;
+            transform: scale(0.8);
+            filter: drop-shadow(0px 8px 16px rgba(212, 175, 55, 0.3));
+        }
+        
+        .hero-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: var(--space-lg);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.25rem);
+            color: var(--color-navy);
+            margin-bottom: var(--space-xl);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .hero-cta {
+            display: inline-block;
+            padding: var(--space-md) var(--space-xl);
+            background: var(--color-accent);
+            color: var(--color-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: var(--transition-fast);
+            opacity: 0;
+            transform: translateY(30px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .hero-cta:hover {
+            background: var(--color-accent-copper);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: var(--space-xl);
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: bounce 2s infinite;
+        }
+        
+        .scroll-indicator svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--color-gray-medium);
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+        
+        /* Section Styles */
+        .section {
+            padding: var(--space-xxl) 0;
+            position: relative;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-xxl);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 var(--space-lg);
+        }
+        
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            margin-bottom: var(--space-lg);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .section-description {
+            font-size: 1.1rem;
+            color: var(--color-navy);
+            line-height: 1.7;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+        
+        /* Color System */
+        .color-system {
+            background: var(--color-gray-light);
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+        
+        .color-swatch {
+            background: var(--color-secondary);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .color-swatch:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .color-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto var(--space-md);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .color-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .color-info p {
+            font-size: 0.9rem;
+            color: var(--color-navy);
+            font-family: monospace;
+        }
+        
+        .color-details {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            padding: var(--space-lg);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition-fast);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .color-swatch:hover .color-details {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Typography Section */
+        .typography-system {
+            background: var(--color-secondary);
+        }
+        
+        .typography-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xxl);
+            align-items: start;
+            margin-top: var(--space-xl);
+        }
+        
+        .font-specimen {
+            text-align: left;
+        }
+        
+        .font-specimen h3 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            color: var(--color-primary);
+        }
+        
+        .font-weights {
+            display: flex;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+        }
+        
+        .font-weight {
+            padding: var(--space-sm) var(--space-md);
+            background: var(--color-gray-light);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-size: 0.9rem;
+        }
+        
+        .font-weight:hover,
+        .font-weight.active {
+            background: var(--color-accent);
+            color: var(--color-secondary);
+        }
+        
+        .text-editor {
+            background: var(--color-gray-light);
+            border-radius: 12px;
+            padding: var(--space-xl);
+        }
+        
+        .editor-controls {
+            display: flex;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+        }
+        
+        .editor-input {
+            width: 100%;
+            padding: var(--space-md);
+            border: 2px solid var(--color-gray-medium);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition-fast);
+            background: var(--color-secondary);
+        }
+        
+        .editor-input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+        
+        .editor-preview {
+            min-height: 120px;
+            padding: var(--space-lg);
+            background: var(--color-secondary);
+            border-radius: 8px;
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+        
+        /* Iconography */
+        .iconography-system {
+            background: var(--color-beige);
+        }
+        
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+        
+        .icon-item {
+            aspect-ratio: 1;
+            background: var(--color-secondary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+        
+        .icon-item:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .icon-item svg {
+            width: 32px;
+            height: 32px;
+            stroke: var(--color-primary);
+            stroke-width: 2;
+            fill: none;
+            transition: var(--transition-fast);
+        }
+        
+        .icon-item:hover svg {
+            stroke: var(--color-accent);
+            transform: rotate(5deg);
+        }
+        
+        /* Component Library */
+        .component-system {
+            background: var(--color-secondary);
+        }
+        
+        .theme-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .theme-toggle button {
+            padding: var(--space-sm) var(--space-lg);
+            background: var(--color-gray-light);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-weight: 500;
+        }
+        
+        .theme-toggle button.active {
+            background: var(--color-accent);
+            color: var(--color-secondary);
+        }
+        
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+            margin-top: var(--space-xl);
+        }
+        
+        .component-category {
+            background: var(--color-gray-light);
+            border-radius: 12px;
+            padding: var(--space-xl);
+        }
+        
+        .component-category h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-lg);
+            text-align: center;
+        }
+        
+        .component-demo {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        
+        .btn {
+            padding: var(--space-sm) var(--space-lg);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition-fast);
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-secondary);
+        }
+        
+        .btn-primary:hover {
+            background: var(--color-accent-copper);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-accent);
+            border: 2px solid var(--color-accent);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--color-accent);
+            color: var(--color-secondary);
+        }
+        
+        .form-group {
+            margin-bottom: var(--space-md);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: var(--space-sm) var(--space-md);
+            border: 2px solid var(--color-gray-medium);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition-fast);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+        
+        .card {
+            background: var(--color-secondary);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-fast);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+        
+        /* Design Tools Integration */
+        .tools-section {
+            background: var(--color-gray-light);
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-xl);
+            margin-top: var(--space-xl);
+        }
+        
+        .tool-card {
+            background: var(--color-secondary);
+            border-radius: 12px;
+            padding: var(--space-xl);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-fast);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--space-md);
+            background: var(--color-accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-secondary);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--color-primary);
+            color: var(--color-secondary);
+            text-align: center;
+            padding: var(--space-xl) 0;
+        }
+        
+        .footer p {
+            opacity: 0.8;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .typography-showcase {
+                grid-template-columns: 1fr;
+                gap: var(--space-xl);
+            }
+            
+            .color-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: var(--space-md);
+            }
+            
+            .icon-grid {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                gap: var(--space-md);
+            }
+            
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .fade-in.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        
+        .scale-in.animated {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* Dark Theme */
+        .dark-theme {
+            --color-primary: #ffffff;
+            --color-secondary: #1a1a1a;
+            --color-gray-light: #2a2a2a;
+            --color-gray-medium: #555555;
+            --color-navy: #e0e0e0;
+            --color-beige: #2a2a2a;
+        }
+        
+        .dark-theme body {
+            background: var(--color-secondary);
+            color: var(--color-primary);
+        }
+        
+        .dark-theme .nav {
+            background: rgba(26, 26, 26, 0.95);
+        }
+        
+        .dark-theme .nav-links a {
+            color: var(--color-primary);
+        }
+        
+        .dark-theme .color-swatch,
+        .dark-theme .tool-card,
+        .dark-theme .card {
+            background: var(--color-gray-light);
+        }
+        
+        .dark-theme .form-input {
+            background: var(--color-gray-light);
+            border-color: var(--color-gray-medium);
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">Apex Systems</a>
+            <ul class="nav-links">
+                <li><a href="#color-system">Color System</a></li>
+                <li><a href="#typography">Typography</a></li>
+                <li><a href="#iconography">Iconography</a></li>
+                <li><a href="#components">Components</a></li>
+                <li><a href="#tools">Design Tools</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-background" id="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-logo scale-in">
+                <img src="resources/hero-logo.png" alt="Apex Systems Logo">
+            </div>
+            <h1 class="hero-title">
+                <span class="typed-text"></span>
+            </h1>
+            <p class="hero-subtitle">
+                A comprehensive design system showcasing systematic brand thinking 
+                at an enterprise level. Built for Fortune 500 sophistication.
+            </p>
+            <a href="#color-system" class="hero-cta">Explore the System</a>
+        </div>
+        <div class="scroll-indicator">
+            <svg viewBox="0 0 24 24">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Color System -->
+    <section class="section color-system" id="color-system">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Color System</h2>
+                <p class="section-description fade-in">
+                    A carefully curated palette designed for accessibility, brand recognition, 
+                    and emotional resonance. Each color serves a specific purpose in our design ecosystem.
+                </p>
+            </div>
+            
+            <div class="color-grid">
+                <div class="color-swatch fade-in" data-color="#1a1a1a">
+                    <div class="color-preview" style="background: #1a1a1a;"></div>
+                    <div class="color-info">
+                        <h3>Charcoal Black</h3>
+                        <p>#1a1a1a</p>
+                    </div>
+                    <div class="color-details">
+                        <h4>Primary Text</h4>
+                        <p>High contrast text color ensuring 4.5:1 ratio on light backgrounds</p>
+                        <p><strong>Usage:</strong> Body text, headers, primary content</p>
+                    </div>
+                </div>
+                
+                <div class="color-swatch fade-in" data-color="#d4af37">
+                    <div class="color-preview" style="background: #d4af37;"></div>
+                    <div class="color-info">
+                        <h3>Accent Gold</h3>
+                        <p>#d4af37</p>
+                    </div>
+                    <div class="color-details">
+                        <h4>Premium Accent</h4>
+                        <p>Luxury gold for premium elements and call-to-action buttons</p>
+                        <p><strong>Usage:</strong> CTAs, highlights, brand elements</p>
+                    </div>
+                </div>
+                
+                <div class="color-swatch fade-in" data-color="#2c3e50">
+                    <div class="color-preview" style="background: #2c3e50;"></div>
+                    <div class="color-info">
+                        <h3>Deep Navy</h3>
+                        <p>#2c3e50</p>
+                    </div>
+                    <div class="color-details">
+                        <h4>Secondary Text</h4>
+                        <p>Professional navy for secondary information and trust elements</p>
+                        <p><strong>Usage:</strong> Subtitles, metadata, navigation</p>
+                    </div>
+                </div>
+                
+                <div class="color-swatch fade-in" data-color="#b87333">
+                    <div class="color-preview" style="background: #b87333;"></div>
+                    <div class="color-info">
+                        <h3>Copper</h3>
+                        <p>#b87333</p>
+                    </div>
+                    <div class="color-details">
+                        <h4>Hover States</h4>
+                        <p>Warm copper for interactive hover states and secondary accents</p>
+                        <p><strong>Usage:</strong> Hover effects, secondary buttons</p>
+                    </div>
+                </div>
+                
+                <div class="color-swatch fade-in" data-color="#f8f9fa">
+                    <div class="color-preview" style="background: #f8f9fa;"></div>
+                    <div class="color-info">
+                        <h3>Warm Gray</h3>
+                        <p>#f8f9fa</p>
+                    </div>
+                    <div class="color-details">
+                        <h4>Background</h4>
+                        <p>Subtle background color for sections and content areas</p>
+                        <p><strong>Usage:</strong> Section backgrounds, cards, containers</p>
+                    </div>
+                </div>
+                
+                <div class="color-swatch fade-in" data-color="#bdc3c7">
+                    <div class="color-preview" style="background: #bdc3c7;"></div>
+                    <div class="color-info">
+                        <h3>Soft Silver</h3>
+                        <p>#bdc3c7</p>
+                    </div>
+                    <div class="color-details">
+                        <h4>Borders & Lines</h4>
+                        <p>Neutral silver for borders, dividers, and inactive states</p>
+                        <p><strong>Usage:</strong> Borders, dividers, disabled elements</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Typography System -->
+    <section class="section typography-system" id="typography">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Typography Hierarchy</h2>
+                <p class="section-description fade-in">
+                    A refined typographic system combining editorial elegance with functional clarity. 
+                    Playfair Display for authority, Inter for readability.
+                </p>
+            </div>
+            
+            <div class="typography-showcase">
+                <div class="font-specimen fade-in">
+                    <h3>Aa</h3>
+                    <div class="font-weights">
+                        <span class="font-weight active" data-weight="400">Regular</span>
+                        <span class="font-weight" data-weight="500">Medium</span>
+                        <span class="font-weight" data-weight="600">Semibold</span>
+                        <span class="font-weight" data-weight="700">Bold</span>
+                    </div>
+                    
+                    <div class="typography-examples">
+                        <h1 style="font-size: 3rem; font-weight: 700; margin-bottom: 1rem;">Heading One</h1>
+                        <h2 style="font-size: 2.25rem; font-weight: 600; margin-bottom: 1rem;">Heading Two</h2>
+                        <h3 style="font-size: 1.5rem; font-weight: 500; margin-bottom: 1rem;">Heading Three</h3>
+                        <p style="font-size: 1rem; line-height: 1.6; margin-bottom: 1rem;">
+                            Body text with optimal line height for extended reading. 
+                            This demonstrates the careful balance between readability and elegance.
+                        </p>
+                        <p style="font-size: 0.875rem; opacity: 0.8;">Caption text for secondary information</p>
+                    </div>
+                </div>
+                
+                <div class="text-editor fade-in">
+                    <h4 style="margin-bottom: var(--space-md); font-size: 1.25rem;">Live Text Editor</h4>
+                    <div class="editor-controls">
+                        <input type="text" class="editor-input" id="editor-input" 
+                               placeholder="Type something to see it in action..." 
+                               value="The quick brown fox jumps over the lazy dog">
+                    </div>
+                    <div class="editor-preview" id="editor-preview">
+                        The quick brown fox jumps over the lazy dog
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Iconography -->
+    <section class="section iconography-system" id="iconography">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Iconography System</h2>
+                <p class="section-description fade-in">
+                    Consistent iconography with 2px stroke weight and 2px corner radius. 
+                    Each icon is crafted for clarity and brand consistency.
+                </p>
+            </div>
+            
+            <div class="icon-grid">
+                <!-- Icons will be generated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Component Library -->
+    <section class="section component-system" id="components">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Component Library</h2>
+                <p class="section-description fade-in">
+                    Systematic UI components built for consistency and scalability. 
+                    Every element follows our design principles and accessibility standards.
+                </p>
+            </div>
+            
+            <div class="theme-toggle">
+                <button class="active" data-theme="light">Light Theme</button>
+                <button data-theme="dark">Dark Theme</button>
+            </div>
+            
+            <div class="component-grid">
+                <div class="component-category fade-in">
+                    <h3>Buttons</h3>
+                    <div class="component-demo">
+                        <button class="btn btn-primary">Primary Button</button>
+                        <button class="btn btn-secondary">Secondary Button</button>
+                        <button class="btn" style="background: var(--color-gray-medium); color: var(--color-primary);">Disabled Button</button>
+                    </div>
+                </div>
+                
+                <div class="component-category fade-in">
+                    <h3>Form Elements</h3>
+                    <div class="component-demo">
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="Text Input">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-input" placeholder="Email Input">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-input">
+                                <option>Select Option</option>
+                                <option>Option 1</option>
+                                <option>Option 2</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="component-category fade-in">
+                    <h3>Cards</h3>
+                    <div class="component-demo">
+                        <div class="card">
+                            <h4 style="margin-bottom: var(--space-sm);">Card Title</h4>
+                            <p style="font-size: 0.9rem; opacity: 0.8;">This is a sample card component with proper spacing and elevation.</p>
+                        </div>
+                        <div class="card">
+                            <h4 style="margin-bottom: var(--space-sm);">Another Card</h4>
+                            <p style="font-size: 0.9rem; opacity: 0.8;">Cards provide consistent containers for related content.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="component-category fade-in">
+                    <h3>Navigation</h3>
+                    <div class="component-demo">
+                        <nav style="display: flex; gap: var(--space-md); padding: var(--space-md); background: var(--color-gray-light); border-radius: 8px;">
+                            <a href="#" style="text-decoration: none; color: var(--color-primary); font-weight: 500;">Home</a>
+                            <a href="#" style="text-decoration: none; color: var(--color-navy);">About</a>
+                            <a href="#" style="text-decoration: none; color: var(--color-navy);">Services</a>
+                            <a href="#" style="text-decoration: none; color: var(--color-navy);">Contact</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Design Tools Integration -->
+    <section class="section tools-section" id="tools">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Design Tools Integration</h2>
+                <p class="section-description fade-in">
+                    Seamless integration with industry-standard design tools. 
+                    From Figma components to design tokens, we support your entire workflow.
+                </p>
+            </div>
+            
+            <div class="tools-grid">
+                <div class="tool-card fade-in">
+                    <div class="tool-icon">Fg</div>
+                    <h3>Figma</h3>
+                    <p>Complete component library with auto-layout, variants, and design tokens.</p>
+                </div>
+                
+                <div class="tool-card fade-in">
+                    <div class="tool-icon">Ad</div>
+                    <h3>Adobe Creative Suite</h3>
+                    <p>Compatible with Illustrator, Photoshop, and InDesign workflows.</p>
+                </div>
+                
+                <div class="tool-card fade-in">
+                    <div class="tool-icon">Tk</div>
+                    <h3>Design Tokens</h3>
+                    <p>JSON-based design tokens for consistent cross-platform implementation.</p>
+                </div>
+                
+                <div class="tool-card fade-in">
+                    <div class="tool-icon">Cd</div>
+                    <h3>Component Library</h3>
+                    <p>Ready-to-use React, Vue, and vanilla HTML/CSS components.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Apex Systems. Enterprise Brand Identity Showcase.</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
